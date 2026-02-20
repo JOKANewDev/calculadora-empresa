@@ -163,7 +163,7 @@
 
     <div class="product-card">
         <div class="product-info">
-            <h3>Crocância Máxima</h3>
+            <h3>Família Crocante</h3>
             <p>1kg - R$ 60,00</p>
         </div>
         <input type="number" id="p1" class="qty-input" value="0" min="0" oninput="calcular()">
@@ -171,7 +171,7 @@
 
     <div class="product-card">
         <div class="product-info">
-            <h3>Crocância Ideal</h3>
+            <h3>Meio Kilo de Felicidade</h3>
             <p>500g - R$ 35,00</p>
         </div>
         <input type="number" id="p2" class="qty-input" value="0" min="0" oninput="calcular()">
@@ -223,8 +223,8 @@
         const total = calcular();
 
         let itens = "";
-        if(q1 > 0) itens += `🟡 Pack Crocância Máxima (1kg) – Qtd: ${q1}\n`;
-        if(q2 > 0) itens += `🟡 Pack Crocância Ideal (500g) – Qtd: ${q2}\n`;
+        if(q1 > 0) itens += `🟡 Família Crocante (1kg) – Qtd: ${q1}\n`;
+        if(q2 > 0) itens += `🟡 Meio Kilo de Felicidade (500g) – Qtd: ${q2}\n`;
         if(q3 > 0) itens += `🟡 Snack Express (30g) – Qtd: ${q3}\n`;
 
         if(itens === "") {
