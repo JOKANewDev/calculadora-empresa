@@ -8,7 +8,6 @@
     <style>
         :root {
             --amarelo-banana: #FFD700;
-            --amarelo-ouro: #FFC107;
             --laranja-suave: #FF8C00;
             --branco: #FFFFFF;
             --cinza-fundo: #F8F9FA;
@@ -17,7 +16,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--cinza-fundo);
+            background: linear-gradient(135deg, #FFF7CC, #FFE4B5);
             color: var(--texto);
             margin: 0;
             display: flex;
@@ -29,127 +28,95 @@
         .container {
             background: var(--branco);
             width: 100%;
-            max-width: 450px;
-            padding: 2rem;
+            max-width: 480px;
+            padding: 1.5rem;
             border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             margin: 15px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            color: var(--laranja-suave);
-            margin: 0;
-        }
-
-        .header span {
-            font-weight: 400;
-            color: #888;
-            font-size: 0.9rem;
-        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 1.4rem; color: var(--laranja-suave); margin: 0; }
 
         .product-card {
             background: #FFFBEB;
             border: 1px solid #FFEDCC;
-            padding: 15px;
+            padding: 12px;
             border-radius: 15px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+        }
+
+        .product-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s;
+            margin-bottom: 8px;
         }
 
-        .product-card:hover {
-            transform: scale(1.02);
-        }
-
-        .product-info h3 {
-            margin: 0;
-            font-size: 1rem;
-            color: #5d4037;
-        }
-
-        .product-info p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #999;
-        }
-
+        .product-info strong { font-size: 0.95rem; display: block; }
+        
         .qty-input {
-            width: 60px;
+            width: 55px;
             padding: 8px;
             border: 2px solid var(--amarelo-banana);
-            border-radius: 10px;
+            border-radius: 8px;
             text-align: center;
             font-weight: bold;
-            outline: none;
         }
 
-        .delivery-section {
-            margin-top: 20px;
-            padding: 15px;
-            border-top: 2px dashed #EEE;
+        .flavor-select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #DDD;
+            font-size: 0.85rem;
+            background-color: white;
+            color: #555;
         }
 
+        .delivery-section { margin-top: 15px; }
         .delivery-input {
             width: 100%;
             box-sizing: border-box;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #DDD;
             border-radius: 10px;
-            margin-top: 5px;
         }
 
         .total-box {
             background: linear-gradient(135deg, var(--amarelo-banana), var(--laranja-suave));
             color: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             text-align: center;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
-        .total-box h2 {
-            margin: 0;
-            font-size: 2rem;
-        }
+        .total-box h2 { margin: 0; font-size: 1.8rem; }
 
-        .button-group {
-            display: grid;
-            gap: 10px;
-        }
-
+        .button-group { display: grid; gap: 8px; }
         button {
             border: none;
             padding: 12px;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
             font-family: 'Poppins', sans-serif;
         }
 
-        .btn-calc { background: #333; color: white; }
         .btn-msg { background: var(--laranja-suave); color: white; }
         .btn-copy { background: #EEE; color: #555; }
-
-        button:active { transform: scale(0.98); }
+        .btn-wa { background: #25D366; color: white; }
 
         #outputMessage {
             margin-top: 15px;
-            padding: 10px;
-            background: #f0f0f0;
+            padding: 12px;
+            background: #F1F1F1;
             border-radius: 10px;
             font-size: 0.8rem;
             white-space: pre-wrap;
             display: none;
-            border: 1px solid #ddd;
+            border: 1px solid #DDD;
         }
     </style>
 </head>
@@ -162,91 +129,142 @@
     </div>
 
     <div class="product-card">
-        <div class="product-info">
-            <h3>Família Crocante</h3>
-            <p>1kg - R$ 60,00</p>
+        <div class="product-row">
+            <div class="product-info">
+                <strong>Família Crocante</strong>
+                <small>1kg - R$ 60,00</small>
+            </div>
+            <input type="number" id="p1" class="qty-input" min="0" value="0">
         </div>
-        <input type="number" id="p1" class="qty-input" value="0" min="0" oninput="calcular()">
+        <select id="s1" class="flavor-select">
+            <option value="Natural">Sabor: Natural</option>
+            <option value="Lemon Pepper">Sabor: Lemon Pepper</option>
+            <option value="Páprica Picante">Sabor: Páprica Picante</option>
+            <option value="Alho">Sabor: Alho</option>
+            <option value="Churros">Sabor: Churros</option>
+        </select>
     </div>
 
     <div class="product-card">
-        <div class="product-info">
-            <h3>Meio Kilo de Felicidade</h3>
-            <p>500g - R$ 30,00</p>
+        <div class="product-row">
+            <div class="product-info">
+                <strong>Meio Kilo de Felicidade</strong>
+                <small>500g - R$ 30,00</small>
+            </div>
+            <input type="number" id="p2" class="qty-input" min="0" value="0">
         </div>
-        <input type="number" id="p2" class="qty-input" value="0" min="0" oninput="calcular()">
+        <select id="s2" class="flavor-select">
+            <option value="Natural">Sabor: Natural</option>
+            <option value="Lemon Pepper">Sabor: Lemon Pepper</option>
+            <option value="Páprica Picante">Sabor: Páprica Picante</option>
+            <option value="Alho">Sabor: Alho</option>
+            <option value="Churros">Sabor: Churros</option>
+        </select>
     </div>
 
     <div class="product-card">
-        <div class="product-info">
-            <h3>Snack Express</h3>
-            <p>30g - R$ 5,00</p>
+        <div class="product-row">
+            <div class="product-info">
+                <strong>Snack Express</strong>
+                <small>40g - R$ 5,00</small>
+            </div>
+            <input type="number" id="p3" class="qty-input" min="0" value="0">
         </div>
-        <input type="number" id="p3" class="qty-input" value="0" min="0" oninput="calcular()">
+        <select id="s3" class="flavor-select">
+            <option value="Natural">Sabor: Natural</option>
+            <option value="Lemon Pepper">Sabor: Lemon Pepper</option>
+            <option value="Páprica Picante">Sabor: Páprica Picante</option>
+            <option value="Alho">Sabor: Alho</option>
+            <option value="Churros">Sabor: Churros</option>
+        </select>
     </div>
 
     <div class="delivery-section">
-        <label>🚚 Valor da Entrega (R$)</label>
-        <input type="number" id="frete" class="delivery-input" value="0" step="0.50" oninput="calcular()">
+        <label><small>Valor da Entrega (R$)</small></label>
+        <input type="number" id="frete" class="delivery-input" value="0" step="0.50">
     </div>
 
     <div class="total-box">
-        <span>Total do Pedido</span>
+        <small>Total do Pedido</small>
         <h2 id="totalDisplay">R$ 0,00</h2>
     </div>
 
     <div class="button-group">
-        <button class="btn-msg" onclick="gerarMensagem()">Gerar Mensagem WhatsApp</button>
-        <button class="btn-copy" id="btnCopiar" onclick="copiarMensagem()" style="display:none;">Copiar Mensagem</button>
+        <button class="btn-msg" onclick="gerarMensagem()">Gerar Mensagem</button>
+        <button class="btn-copy" onclick="copiarMensagem()">Copiar Mensagem</button>
+        <button class="btn-wa" onclick="abrirWhatsApp()">Enviar para WhatsApp</button>
     </div>
 
     <div id="outputMessage"></div>
 </div>
 
 <script>
-    function calcular() {
-        const p1 = document.getElementById('p1').value * 60;
-        const p2 = document.getElementById('p2').value * 30;
-        const p3 = document.getElementById('p3').value * 5;
-        const frete = parseFloat(document.getElementById('frete').value) || 0;
+const precos = { p1: 60, p2: 30, p3: 5 };
 
-        const total = p1 + p2 + p3 + frete;
-        document.getElementById('totalDisplay').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        return total;
-    }
+document.querySelectorAll("input, select").forEach(el => {
+    el.addEventListener("input", calcular);
+});
 
-    function gerarMensagem() {
-        const q1 = document.getElementById('p1').value;
-        const q2 = document.getElementById('p2').value;
-        const q3 = document.getElementById('p3').value;
-        const frete = parseFloat(document.getElementById('frete').value) || 0;
-        const total = calcular();
+function formatar(v) { return v.toFixed(2).replace('.', ','); }
 
-        let itens = "";
-        if(q1 > 0) itens += `🟡 Família Crocante (1kg) – Qtd: ${q1}\n`;
-        if(q2 > 0) itens += `🟡 Meio Kilo de Felicidade (500g) – Qtd: ${q2}\n`;
-        if(q3 > 0) itens += `🟡 Snack Express (30g) – Qtd: ${q3}\n`;
+function calcular() {
+    let total = 0;
+    Object.keys(precos).forEach(id => {
+        const q = parseInt(document.getElementById(id).value) || 0;
+        total += q * precos[id];
+        localStorage.setItem(id, q);
+        localStorage.setItem('flavor_'+id, document.getElementById('s'+id.at(-1)).value);
+    });
+    const f = parseFloat(document.getElementById('frete').value) || 0;
+    total += f;
+    localStorage.setItem("frete", f);
+    document.getElementById('totalDisplay').innerText = `R$ ${formatar(total)}`;
+    return total;
+}
 
-        if(itens === "") {
-            alert("Selecione pelo menos um produto!");
-            return;
-        }
+function gerarMensagem() {
+    const q1 = parseInt(document.getElementById("p1").value) || 0;
+    const q2 = parseInt(document.getElementById("p2").value) || 0;
+    const q3 = parseInt(document.getElementById("p3").value) || 0;
+    const f = parseFloat(document.getElementById("frete").value) || 0;
+    const total = calcular();
 
-        const mensagem = `Olá! 🍌\n\nSegue seu pedido Banana TopChips:\n${itens}\n🚚 Entrega: R$ ${frete.toFixed(2).replace('.', ',')}\n💰 *Total: R$ ${total.toFixed(2).replace('.', ',')}*\n\nObrigado pela preferência 💛`;
-        
-        const output = document.getElementById('outputMessage');
-        output.innerText = mensagem;
-        output.style.display = 'block';
-        document.getElementById('btnCopiar').style.display = 'block';
-    }
+    if(q1 + q2 + q3 === 0) { alert("Selecione um produto!"); return; }
 
-    function copiarMensagem() {
-        const texto = document.getElementById('outputMessage').innerText;
-        navigator.clipboard.writeText(texto).then(() => {
-            alert("Mensagem copiada com sucesso! 👍");
-        });
-    }
+    let itens = "";
+    if(q1 > 0) itens += `* Família Crocante (1kg) - ${document.getElementById('s1').value} - Qtd: ${q1}\n`;
+    if(q2 > 0) itens += `* Meio Kilo de Felicidade (500g) - ${document.getElementById('s2').value} - Qtd: ${q2}\n`;
+    if(q3 > 0) itens += `* Snack Express (40g) - ${document.getElementById('s3').value} - Qtd: ${q3}\n`;
+
+    const msg = `Olá! 🍌\n\nSegue seu pedido Banana TopChips:\n${itens}\nEntrega: R$ ${formatar(f)}\nTotal: R$ ${formatar(total)}\n\nObrigado pela preferência! 💛`;
+
+    const out = document.getElementById("outputMessage");
+    out.innerText = msg;
+    out.style.display = "block";
+}
+
+function copiarMensagem() {
+    const txt = document.getElementById("outputMessage").innerText;
+    if(!txt) return alert("Gere a mensagem primeiro!");
+    navigator.clipboard.writeText(txt);
+    alert("Copiado!");
+}
+
+function abrirWhatsApp() {
+    const txt = document.getElementById("outputMessage").innerText;
+    if(!txt) return alert("Gere a mensagem primeiro!");
+    window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
+}
+
+window.onload = () => {
+    Object.keys(precos).forEach(id => {
+        document.getElementById(id).value = localStorage.getItem(id) || 0;
+        const flav = localStorage.getItem('flavor_'+id);
+        if(flav) document.getElementById('s'+id.at(-1)).value = flav;
+    });
+    document.getElementById('frete').value = localStorage.getItem("frete") || 0;
+    calcular();
+};
 </script>
-
 </body>
 </html>

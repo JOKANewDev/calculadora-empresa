@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana TopChips - Calculadora Interna</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --amarelo-banana: #FFD700;
+            --laranja-suave: #FF8C00;
+            --branco: #FFFFFF;
+            --cinza-fundo: #F8F9FA;
+            --texto: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFF7CC, #FFE4B5);
+            color: var(--texto);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--branco);
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            margin: 15px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--laranja-suave);
+            margin: 0;
+        }
+
+        .product-card {
+            background: #FFFBEB;
+            border: 1px solid #FFEDCC;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-info strong { display: block; font-size: 1rem; }
+        .product-info small { color: #888; }
+
+        .qty-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid var(--amarelo-banana);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            outline: none;
+        }
+
+        .delivery-section {
+            margin-top: 15px;
+        }
+
+        .delivery-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #DDD;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, var(--amarelo-banana), var(--laranja-suave));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .total-box h2 { margin: 5px 0 0; font-size: 2rem; }
+
+        .button-group { display: grid; gap: 10px; }
+
+        button {
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-msg { background: var(--laranja-suave); color: white; }
+        .btn-copy { background: #EEE; color: #555; }
+        .btn-wa { background: #25D366; color: white; }
+
+        #outputMessage {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            display: none;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Banana TopChips 🍌</h1>
+        <span>Calculadora de Pedidos</span>
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <strong>👨‍👩‍👧‍👦 Família Crocante</strong>
+            <small>1kg - R$ 60,00</small>
+        </div>
+        <input type="number" id="p1" class="qty-input" min="0" value="0">
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <strong>👫 Meio Kilo de Felicidade</strong>
+            <small>500g - R$ 30,00</small>
+        </div>
+        <input type="number" id="p2" class="qty-input" min="0" value="0">
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <strong>🙋‍♂️ Snack Express</strong>
+            <small>40g - R$ 5,00</small>
+        </div>
+        <input type="number" id="p3" class="qty-input" min="0" value="0">
+    </div>
+
+    <div class="delivery-section">
+        <label>🚚 Valor da Entrega</label>
+        <input type="number" id="frete" class="delivery-input" value="0" step="0.50">
+    </div>
+
+    <div class="total-box">
+        <span>Total do Pedido</span>
+        <h2 id="totalDisplay">R$ 0,00</h2>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-msg" onclick="gerarMensagem()">Gerar Mensagem</button>
+        <button class="btn-copy" onclick="copiarMensagem()">Copiar Texto</button>
+        <button class="btn-wa" onclick="abrirWhatsApp()">Enviar para WhatsApp</button>
+    </div>
+
+    <div id="outputMessage"></div>
+</div>
+
+<script>
+const preços = { p1: 60, p2: 30, p3: 5 };
+
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", calcular);
+});
+
+function formatar(valor) {
+    return valor.toFixed(2).replace('.', ',');
+}
+
+function calcular() {
+    let total = 0;
+    Object.keys(preços).forEach(id => {
+        const qtd = parseInt(document.getElementById(id).value) || 0;
+        total += qtd * preços[id];
+        localStorage.setItem(id, qtd);
+    });
+
+    const frete = parseFloat(document.getElementById('frete').value) || 0;
+    total += frete;
+    localStorage.setItem("frete", frete);
+
+    document.getElementById('totalDisplay').innerText = `R$ ${formatar(total)}`;
+    return total;
+}
+
+function gerarMensagem() {
+    const q1 = parseInt(document.getElementById("p1").value) || 0;
+    const q2 = parseInt(document.getElementById("p2").value) || 0;
+    const q3 = parseInt(document.getElementById("p3").value) || 0;
+    const frete = parseFloat(document.getElementById("frete").value) || 0;
+    const total = calcular();
+
+    if(q1 + q2 + q3 === 0) {
+        alert("Adicione pelo menos um item! 🍌");
+        return;
+    }
+
+    let itens = "";
+    if(q1 > 0) itens += `🟡 Família Crocante (1kg) – Qtd: ${q1}\n`;
+    if(q2 > 0) itens += `🟡 Meio Kilo de Felicidade (500g) – Qtd: ${q2}\n`;
+    if(q3 > 0) itens += `🟡 Snack Express (40g) – Qtd: ${q3}\n`;
+
+    const msg = `Olá! 🍌\n\nSegue seu pedido Banana TopChips:\n\n${itens}\n🚚 Entrega: R$ ${formatar(frete)}\n💰 *Total: R$ ${formatar(total)}*\n\nObrigado pela preferência 💛`;
+
+    const output = document.getElementById("outputMessage");
+    output.innerText = msg;
+    output.style.display = "block";
+}
+
+function copiarMensagem() {
+    const text = document.getElementById("outputMessage").innerText;
+    if(!text) { alert("Gere a mensagem primeiro!"); return; }
+    navigator.clipboard.writeText(text);
+    alert("Copiado! 👍");
+}
+
+function abrirWhatsApp() {
+    const text = document.getElementById("outputMessage").innerText;
+    if(!text) { alert("Gere a mensagem primeiro!"); return; }
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+window.onload = () => {
+    Object.keys(preços).forEach(id => {
+        document.getElementById(id).value = localStorage.getItem(id) || 0;
+    });
+    document.getElementById('frete').value = localStorage.getItem("frete") || 0;
+    calcular();
+};
+</script>
+
+</body>
+</html>
