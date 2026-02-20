@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana TopChips - Vendas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --amarelo-banana: #FFD700;
+            --amarelo-ouro: #FFC107;
+            --laranja-suave: #FF8C00;
+            --branco: #FFFFFF;
+            --cinza-fundo: #F8F9FA;
+            --texto: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--cinza-fundo);
+            color: var(--texto);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--branco);
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 15px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--laranja-suave);
+            margin: 0;
+        }
+
+        .header span {
+            font-weight: 400;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .product-card {
+            background: #FFFBEB;
+            border: 1px solid #FFEDCC;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: scale(1.02);
+        }
+
+        .product-info h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #5d4037;
+        }
+
+        .product-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .qty-input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid var(--amarelo-banana);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            outline: none;
+        }
+
+        .delivery-section {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 2px dashed #EEE;
+        }
+
+        .delivery-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #DDD;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, var(--amarelo-banana), var(--laranja-suave));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .total-box h2 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .button-group {
+            display: grid;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-calc { background: #333; color: white; }
+        .btn-msg { background: var(--laranja-suave); color: white; }
+        .btn-copy { background: #EEE; color: #555; }
+
+        button:active { transform: scale(0.98); }
+
+        #outputMessage {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            display: none;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Banana TopChips 🍌</h1>
+        <span>Calculadora de Pedidos</span>
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <h3>Crocância Máxima</h3>
+            <p>1kg - R$ 60,00</p>
+        </div>
+        <input type="number" id="p1" class="qty-input" value="0" min="0" oninput="calcular()">
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <h3>Crocância Ideal</h3>
+            <p>500g - R$ 35,00</p>
+        </div>
+        <input type="number" id="p2" class="qty-input" value="0" min="0" oninput="calcular()">
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <h3>Snack Express</h3>
+            <p>30g - R$ 2,00</p>
+        </div>
+        <input type="number" id="p3" class="qty-input" value="0" min="0" oninput="calcular()">
+    </div>
+
+    <div class="delivery-section">
+        <label>🚚 Valor da Entrega (R$)</label>
+        <input type="number" id="frete" class="delivery-input" value="0" step="0.50" oninput="calcular()">
+    </div>
+
+    <div class="total-box">
+        <span>Total do Pedido</span>
+        <h2 id="totalDisplay">R$ 0,00</h2>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-msg" onclick="gerarMensagem()">Gerar Mensagem WhatsApp</button>
+        <button class="btn-copy" id="btnCopiar" onclick="copiarMensagem()" style="display:none;">Copiar Mensagem</button>
+    </div>
+
+    <div id="outputMessage"></div>
+</div>
+
+<script>
+    function calcular() {
+        const p1 = document.getElementById('p1').value * 60;
+        const p2 = document.getElementById('p2').value * 35;
+        const p3 = document.getElementById('p3').value * 2;
+        const frete = parseFloat(document.getElementById('frete').value) || 0;
+
+        const total = p1 + p2 + p3 + frete;
+        document.getElementById('totalDisplay').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        return total;
+    }
+
+    function gerarMensagem() {
+        const q1 = document.getElementById('p1').value;
+        const q2 = document.getElementById('p2').value;
+        const q3 = document.getElementById('p3').value;
+        const frete = parseFloat(document.getElementById('frete').value) || 0;
+        const total = calcular();
+
+        let itens = "";
+        if(q1 > 0) itens += `🟡 Pack Crocância Máxima (1kg) – Qtd: ${q1}\n`;
+        if(q2 > 0) itens += `🟡 Pack Crocância Ideal (500g) – Qtd: ${q2}\n`;
+        if(q3 > 0) itens += `🟡 Snack Express (30g) – Qtd: ${q3}\n`;
+
+        if(itens === "") {
+            alert("Selecione pelo menos um produto!");
+            return;
+        }
+
+        const mensagem = `Olá! 🍌\n\nSegue seu pedido Banana TopChips:\n${itens}\n🚚 Entrega: R$ ${frete.toFixed(2).replace('.', ',')}\n💰 *Total: R$ ${total.toFixed(2).replace('.', ',')}*\n\nObrigado pela preferência 💛`;
+        
+        const output = document.getElementById('outputMessage');
+        output.innerText = mensagem;
+        output.style.display = 'block';
+        document.getElementById('btnCopiar').style.display = 'block';
+    }
+
+    function copiarMensagem() {
+        const texto = document.getElementById('outputMessage').innerText;
+        navigator.clipboard.writeText(texto).then(() => {
+            alert("Mensagem copiada com sucesso! 👍");
+        });
+    }
+</script>
+
+</body>
+</html>
